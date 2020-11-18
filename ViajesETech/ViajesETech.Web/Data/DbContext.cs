@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ViajesETech.Web.Filter
+namespace ViajesETech.Web.Data
 {
-    public class Filter
+    using Dominio.Data;
+
+    public class DbContext : ViajesETechContext
     {
     }
 }

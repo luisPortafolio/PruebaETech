@@ -1,6 +1,8 @@
 ﻿namespace ViajesETech.Dominio.Data
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity;
     using System.Linq;
 
@@ -26,23 +28,31 @@
         public virtual DbSet<Viajes> Viajes { get; set; }
         public virtual DbSet<Destinos> Destinos { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<ViajesViajeros> ViajesViajeros { get; set; }
     }
 
     public class Viajeros
     {
+        [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; }   
+        [Index("CI_Index",IsUnique =true)]
         public int CI { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
+        [ForeignKey("User")]
+        public int IdUser { get; set; }
     }
     public class Viajes
     {
         public int Id { get; set; }
+        [Index("Code_Index")]
         public string Code { get; set; }
-        public int Place { get; set; }                     
-        public int IDestination { get; set; }
-        public int IdOrigen { get; set; }
+        public int Place { get; set; }
+        [ForeignKey("Destinos")]
+        public int DestinosFin { get; set; }
+        [ForeignKey("Destinos")]
+        public int DestinosOrigen { get; set; }
         public decimal Price { get; set; }
     }
     public class Destinos
@@ -58,5 +68,13 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public bool Rol { get; set; }
+    }
+    public class ViajesViajeros
+    {
+        public int Id { get; set; }
+        [ForeignKey("Viajes")]
+        public int Viajes { get; set; }
+        [ForeignKey("Viajeros")]
+        public int Viajeros { get; set; }
     }
 }
