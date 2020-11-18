@@ -1,0 +1,166 @@
+﻿@using ViajesETech.Web.Models
+@model LoginUser
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div id="login">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <h3 class="text-center text-info">Login</h3>
+                    <form id="frm">
+                        <div class="form-group-lg">
+                            <div class="form-group">
+                                Usuario
+                                <input type="text" name="User" class="form-control" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                Password
+                                <input type="password" name="Password" class="form-control" />
+                            </div>
+                            <br />
+                            <input type="submit" class="btn btn-success" value="Entrar" id="btnLogin" style="text-align:center" />
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Launch demo modal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            
+
+        </div>
+    </div>
+
+</div>
+
+<div class="row justify-content-center align-items-center" style="padding:10px" id="error">
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"> Recuperar Contraseña </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" name="Register">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmRegistro">
+                    <div class="form-group-lg">
+                        Name
+                        <input type="text" class="form-control" name="Name" />
+                    </div>
+                    <div class="form-group-lg">
+                        UserName
+                        <input type="text" class="form-control" name="UserName" />
+                    </div>
+                    <div class="form-group-lg">
+                        Password
+                        <input type="password" class="form-control" name="NewPassword" />
+                    </div>
+                    <div class="form-group-lg">
+                        Password Repit
+                        <input type="password" class="form-control" name="RepitPassword" />
+                    </div>
+
+                    <div class="form-group-lg">
+                        Email
+                        <input type="email" class="form-control" name="Email" />
+                    </div>
+                    <div class="form-group-lg">
+                        Telefono
+                        <input type="number" class="form-control" name="Phone" />
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="btnSend" class="btn btn-primary">Registrar</button>
+                    </div>
+
+                </form> 
+                
+            </div>
+            <div id="errorRegistrar"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section scripts{
+    <script>
+        $(document).ready(
+            function () {
+                $("#frm").submit(function (e) {
+                    document.getElementById("error").innerHTML = "";
+                    $("#btnLogin").prop("disabled", false);
+                    $("#Register").prop("disabled", false);
+                    e.preventDefault();
+                    url = "@Url.Content("~/Login/Login")";
+                    parametros = $(this).serialize();
+                    $.post(url, parametros, function (data) {
+                        if (data == "1") {
+                            document.location.href = "@Url.Content("~/Home/Index")";
+                        }
+                        else {
+                            alert(data);
+                            document.getElementById("error").innerHTML="<div class='alert-danger'>" + data + "</div>";
+                            $("#btnLogin").prop("disabled", false);
+                            $("#Register").prop("disabled", false);
+                        }
+                    })
+                    $("#btnLogin").prop("disabled", true);
+                    $("#Register").prop("disabled", true);
+                })
+        });
+    $("#frmRegistro").submit(function (e) {
+        e.preventDefault();
+        $("#errorRegistrar").remove();
+        $("#btnSend").prop("disabled", true);
+        url = "@Url.Content("~/Login/Register")";
+        parametros = $(this).serialize();
+         $.post(url, parametros, function (data) {
+                    if (data == "1") {
+                        alert("¡Registro Exitoso!");
+                        $("#btnClose").click();
+
+                    } else
+                    {
+                        $("#errorRegistrar").append(data);
+                    }
+                });
+        });
+
+
+
+    </script>
+}

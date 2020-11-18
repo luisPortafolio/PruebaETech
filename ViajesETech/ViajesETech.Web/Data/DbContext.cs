@@ -7,7 +7,11 @@ namespace ViajesETech.Web.Data
 {
     using Dominio.Data;
 
-    public class DbContext : ViajesETechContext
+    public class DbContext : ViajesETechContext 
     {
+        public DbContext()  : base()
+        {
+
+        }
     }
 }
