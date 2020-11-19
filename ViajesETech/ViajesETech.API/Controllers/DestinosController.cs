@@ -38,7 +38,7 @@ namespace ViajesETech.API.Controllers
                     return new Result { Message = "El Destino ya Existe.", Status = (int)HttpStatusCode.Ambiguous };
                 db.Destinos.Add(new Destinos { Name = destino.Name });
                 db.SaveChanges();
-                return new Result {  Status = (int)HttpStatusCode.Created };
+                return new Result {Message="Destino Creado",  Status = (int)HttpStatusCode.Created };
             }
             string rpta = string.Empty;
             var query = (from state in ModelState.Values
@@ -53,12 +53,11 @@ namespace ViajesETech.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (db.Destinos.Where(d => d.Name == value.Name).Count() > 0)
-                    return new Result { Message = "El Destino ya Existe.", Status = (int)HttpStatusCode.Ambiguous };
-
+                if (db.Destinos.Where(d => d.Name == value.Name && d.Id != value.Id).Count() > 0)
+                    return new Result { Message = "El Destino ya Existe.", Status = (int)HttpStatusCode.Ambiguous }; 
                 db.Entry(value).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return new Result { Status = (int)HttpStatusCode.OK };
+                return new Result {Message="Destino Editado", Status = (int)HttpStatusCode.OK };
             }
             string rpta = string.Empty;
             var query = (from state in ModelState.Values

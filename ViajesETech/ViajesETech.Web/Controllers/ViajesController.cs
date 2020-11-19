@@ -169,10 +169,22 @@ namespace ViajesETech.Web.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         public ActionResult Selected(int id)
-        {
-
+        {                                
             return View(db.Viajes.Find(id));
         }
+        /// <summary>
+        /// Selecciona el Viaje para hacer la reserva del mismo.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult EditViajeViajero(int id)
+        {
+            var viajeViajero = db.ViajesViajeros.Find(id);
+            ViewBag.plazas = viajeViajero.Place;
+
+            return View("Selected",db.Viajes.Find(id));
+        }
+
         /// <summary>
         /// Reserva el viaje con el precio y la cantidad y hace el descuento de los disponibles del total disponible 
         /// </summary>
@@ -306,6 +318,8 @@ namespace ViajesETech.Web.Controllers
         {
             return View("ViajesViajeros", db.ViajesViajeros.ToList());
         }
+
+        
 
         #endregion
 

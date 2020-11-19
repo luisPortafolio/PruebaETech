@@ -164,11 +164,15 @@
     <Compile Include="Controllers\DestinosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\ViajeController.cs" />
+    <Compile Include="Controllers\ViajeroController.cs" />
     <Compile Include="Data\ApiContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\UsuarioApi.cs" />
+    <Compile Include="Models\ViajeApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

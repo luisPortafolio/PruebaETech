@@ -30,7 +30,8 @@ namespace ViajesETech.Web.Filter
                 if ((controller.ToString() == "Viajes" && (action.ToString() == "Index" ||
                     action.ToString() == "Selected" ||
                     action.ToString() == "Reserva" || action.ToString() == "ViajesViajero" || 
-                    action.ToString() == "ViajesViajeroDetail" || action.ToString() == "ViajesViajeroReport")) ||
+                    action.ToString() == "Details" || action.ToString() == "ViajesViajeroReport" 
+                    || action.ToString() == "EditViajeViajero")) ||
                     (controller.ToString() == "Login")||
                     (controller.ToString() == "Viajeros" && action.ToString() == "Edit"))
                 {

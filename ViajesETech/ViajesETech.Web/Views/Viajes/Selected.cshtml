@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Selected";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int max = Model.PlaceDisponibles;    
+    int max = Model.PlaceDisponibles;
+    var places = ViewBag.plazas as int?;
+   
 }
 
 <h2>Selected</h2>
@@ -57,7 +59,7 @@
             @Html.Hidden("IdViaje", Model.Id)
             <div class="form-group-sm">
                 Place Requeridas
-                <input class="form-control" max="@max" type="number" min="0" name="PlaceRequired" id="Requeridas" />
+                <input class="form-control" max="@max" type="number" min="0" name="PlaceRequired" id="Requeridas" value="@places"/>
             </div>
             <div class="form-group-sm">
                 Price
