@@ -60,13 +60,13 @@
             <td>
                 @if (Usuario.Rol)
                 {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning glyphicon glyphicon-eye-open" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
+                    @Html.ActionLink(" Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                    @Html.ActionLink(" Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning glyphicon glyphicon-eye-open" })
+                    @Html.ActionLink(" Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
                 }
                 else
                 {
-                    @Html.ActionLink("Seleccionar", "Selected", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-road" })
+                    @Html.ActionLink(" Seleccionar", "Selected", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-road" })
                 }
 
             </td>

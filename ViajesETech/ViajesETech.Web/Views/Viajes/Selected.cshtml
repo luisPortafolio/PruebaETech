@@ -1,0 +1,86 @@
+﻿@model ViajesETech.Dominio.Data.Viajes
+
+@{
+    ViewBag.Title = "Selected";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int max = Model.PlaceDisponibles;    
+}
+
+<h2>Selected</h2>
+
+<div>
+    <h4>Viajes</h4>
+    <hr />
+    <dl class="dl-horizontal ">
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DestinoOrig)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DestinosOrigen.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DestinoFi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DestinosFin.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Place)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Place) /  @Html.DisplayFor(model => model.PlaceDisponibles)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+    </dl>
+    <div class=" center-block">
+        @using (Html.BeginForm("Reserva", "Viajes", FormMethod.Get))
+        {
+            @Html.Hidden("Price", Model.Price.ToString("N0"))
+            @Html.Hidden("IdViaje", Model.Id)
+            <div class="form-group-sm">
+                Place Requeridas
+                <input class="form-control" max="@max" type="number" min="0" name="PlaceRequired" id="Requeridas" />
+            </div>
+            <div class="form-group-sm">
+                Price
+                <div id="PriceTotal"> </div>
+            </div>
+            <br />
+            <div class="form-group-sm">
+                <input type="submit" class="btn btn-success" value="Reservar" />
+                @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default" })
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#Requeridas").change(function (e) {                  
+            document.getElementById("PriceTotal").innerHTML = "";           
+            var place = parseFloat($("#Requeridas").val());
+            var total = place * parseFloat(@Model.Price.ToString());
+            var res = "<label class='text-danger'>"+total+"</label>"
+            document.getElementById("PriceTotal").innerHTML = res;           
+        })
+    })
+
+</script>

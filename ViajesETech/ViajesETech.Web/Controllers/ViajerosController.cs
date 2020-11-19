@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using ViajesETech.Dominio.Data;
 using ViajesETech.Web.Data;
 using ViajesETech.Web.Filter;
+using ViajesETech.Web.Models;
 
 namespace ViajesETech.Web.Controllers
 {
@@ -44,13 +45,10 @@ namespace ViajesETech.Web.Controllers
        /// </summary>
        /// <param name="id"></param>
        /// <returns></returns>
-        public ActionResult Edit(int? id)
+        public ActionResult Edit()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Viajeros viajeros = db.Viajeros.Where(v=> v.User.Id==id).First();
+            var user = Session["Usuario"] as UserLoger;
+            Viajeros viajeros = db.Viajeros.Where(v=> v.User.Id==user.Id).First();
             if (viajeros == null)
             {
                 return HttpNotFound();

@@ -8,5 +8,9 @@ namespace ViajesETech.API.Data
     using Dominio.Data;
     public class ApiContext : ViajesETechContext
     {
+        public ApiContext() :base()
+        {
+
+        }
     }
 }

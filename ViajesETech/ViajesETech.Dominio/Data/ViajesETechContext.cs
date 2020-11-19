@@ -111,6 +111,6 @@
         public virtual Viajeros Viajeros { get; set; }
         [Required]
         public int Place { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

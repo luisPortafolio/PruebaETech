@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Data\ViajesETechContext.cs" />
     <Compile Include="Helpers\Encriptador.cs" />
+    <Compile Include="Model\Reserva.cs" />
     <Compile Include="Model\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -19,6 +19,8 @@ namespace ViajesETech.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            var formater = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            formater.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
         }
     }
 }

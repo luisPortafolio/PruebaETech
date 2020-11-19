@@ -33,7 +33,8 @@
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Perfil", "Edit",new { id=user.Id }, "Viajeros")</li>
+                        <li>@Html.ActionLink("Perfil", "Edit", "Viajeros")</li>
+                        <li>@Html.ActionLink("Mis Viajes", "ViajesViajero", "Viajes")</li>
                     }
                     <li>@Html.ActionLink("Viajes", "Index", "Viajes")</li>
 
