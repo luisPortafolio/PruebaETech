@@ -1,0 +1,74 @@
+﻿@using ViajesETech.Web.Models
+@{
+    ViewBag.Title = "ViajeroCrear";
+Layout = "~/Views/Shared/_BaseLayout.cshtml";
+var idUsuario = Session["Usuario"] as UserLoger;
+}
+
+<h2>ViajeroCrear</h2>
+
+<div class="center-block">
+    <div class="modal-body center-block">
+        <form id="frmRegistro">
+
+            @Html.Hidden("IdUsuario", idUsuario.Id)
+
+            <div class="form-group-lg">
+                Identificación
+                <input type="number" class="form-control" name="CI" />
+            </div>
+            <div class="form-group-lg">
+                Dirección
+                <input type="text" class="form-control" name="Address" />
+            </div>
+            <div class="form-group-lg">
+                Telefono
+                <input type="number" class="form-control" name="Phone" />
+            </div>
+            <br />
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-secondary">Salir</button>
+                <button type="submit" id="btnSend" class="btn btn-primary">Registrar</button>
+            </div>
+        </form>
+    </div>
+    <div id="errorRegistrar"></div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#frmRegistro").submit(function (e) {
+                e.preventDefault();
+                $("#btnSend").prop("disabled", true);
+                $("#btnClose").prop("disabled", true);
+                url = "@Url.Content("~/Login/ViajeroCrear")";
+                parametros = $(this).serialize();               
+                $.post(url, parametros, function (data) {
+                    $("#btnSend").prop("disabled", false);
+                    $("#btnClose").prop("disabled", false);
+                    if (data == "1")
+                    {
+                        alert("Registro Exitoso!");
+                        document.location.href = "@Url.Content("~/Viajes/Index")";
+                    }
+                    else
+                    {
+                        document.getElementById("errorRegistrar").innerHTML = "<div class='alert-danger'>" + data + "</div>";
+                    }
+                })
+                $("#btnSend").prop("disabled", false);
+                $("#btnClose").prop("disabled", false);
+            })
+            })
+        $("#btnClose").click(function (e) {
+                e.preventDefault();
+                $("#btnSend").prop("disabled", false);
+                $("#btnClose").prop("disabled", false);
+                url = "@Url.Content("~/Login/Index")";
+            document.location.href = url;
+            $("#btnSend").prop("disabled", true);
+            $("#btnClose").prop("disabled", true);
+            })
+    </script>
+}

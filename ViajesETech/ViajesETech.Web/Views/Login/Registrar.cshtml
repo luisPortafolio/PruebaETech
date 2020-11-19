@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Registrar";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+<h2 class="text-center">Registrar</h2>
+<div class="center-block">
+    <div class="modal-body center-block">
+        <form id="frmRegistro">
+            <div class="form-group-sm col-lg-4">
+                <div class="form-group-sm">
+                    Name
+                    <input type="text" class="form-control" name="Name" />
+                </div>
+                <div class="form-group-lg">
+                    UserName
+                    <input type="text" class="form-control" name="UserName" />
+                </div>
+                <div class="form-group-lg">
+                    Password
+                    <input type="password" class="form-control" name="Password" />
+                </div>
+                <div class="form-group-lg">
+                    Password Repit
+                    <input type="password" class="form-control" name="RepitePassword" />
+                </div>
+                <div class="form-group-lg">
+                    Email
+                    <input type="email" class="form-control" name="Email" />
+                </div>
+
+                <br />
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-secondary">Regresar</button>
+                    <button type="submit" id="btnSend" class="btn btn-primary">Registrar</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<div id="errorRegistrar"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#frmRegistro").submit(function (e) {
+                e.preventDefault();
+                $("#btnSend").prop("disabled", true);
+                $("#btnClose").prop("disabled", true);
+                url = "@Url.Content("~/Login/Registrar")";
+                
+                parametros = $(this).serialize();                
+                $.post(url, parametros, function (data) {                
+                    $("#btnSend").prop("disabled", false);
+                    $("#btnClose").prop("disabled", false);
+                    if (data == "1")
+                    {
+                        alert("Registro Exitoso!");
+                        document.location.href = "@Url.Content("~/Login/Index")";
+                    }
+                    else
+                    {                      
+                        document.getElementById("errorRegistrar").innerHTML = "<div class='alert-danger'>" + data + "</div>";
+                    }                    
+                })  
+                $("#btnSend").prop("disabled", false);
+                $("#btnClose").prop("disabled", false);
+            })
+            })
+        $("#btnClose").click(function (e) {
+                e.preventDefault();
+                $("#btnSend").prop("disabled", false);
+                $("#btnClose").prop("disabled", false);
+                url = "@Url.Content("~/Login/Index")";
+            document.location.href = url;
+            $("#btnSend").prop("disabled", true);
+            $("#btnClose").prop("disabled", true);
+            })
+    </script>
+}

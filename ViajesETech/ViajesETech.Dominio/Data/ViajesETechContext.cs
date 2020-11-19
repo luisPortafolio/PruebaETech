@@ -49,19 +49,33 @@
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50, ErrorMessage = "El campo solo puede tener 50 caracteres")]
         [Index("Code_Index")]
         public string Code { get; set; }
-        public int Place { get; set; }  
+        public int Place { get; set; }
+        public int PlaceDisponibles { get; set; }
         public virtual Destinos DestinosFin { get; set; }
         public virtual Destinos DestinosOrigen { get; set; }
         public virtual ICollection<ViajesViajeros> ViajesViajeros { get; set; }
+        [Required]
         public decimal Price { get; set; }
+        [NotMapped]
+        [Required]
+        [Display(Name ="Origen")]
+        public int DestinoOrig { get; set; }
+        [NotMapped]
+        [Required]
+        [Display(Name = "Destino")]
+        public int DestinoFi { get; set; }
     }
     [Table("Destinos")]
     public class Destinos
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50,ErrorMessage ="El campo solo puede tener 50 caracteres")]
         [Index("IX_Name", IsUnique = true)]
         public string Name { get; set; }
         public virtual ICollection<Viajes> Viajes { get; set; }
@@ -92,8 +106,11 @@
         [Key]
         public int Id { get; set; }
         [Required]
-        public virtual ICollection<Viajes> Viajes { get; set; }
+        public virtual Viajes Viajes { get; set; }
         [Required]
-        public virtual ICollection<Viajeros> Viajeros { get; set; }
+        public virtual Viajeros Viajeros { get; set; }
+        [Required]
+        public int Place { get; set; }
+        public double Price { get; set; }
     }
 }

@@ -27,13 +27,16 @@ namespace ViajesETech.Web.Filter
             }
             else
             {
-                if ((controller.ToString() == "Viajes" && action.ToString() == "Index") )
+                if ((controller.ToString() == "Viajes" && action.ToString() == "Index") ||
+                    (controller.ToString() == "Login") )
                 {
+                    permiso = false;
                 }
             }
             if (permiso)
             {
-                filterContext.HttpContext.Response.Redirect("~/Inicio/Index");
+                HttpContext.Current.Session["Usuario"] = null;
+                filterContext.HttpContext.Response.Redirect("~/Login/Index");
                 return;
             }
             // base.OnActionExecuting(filterContext);

@@ -25,7 +25,7 @@ namespace ViajesETech.Web
         private void UserMaster()
         {
             DbContext db = new DbContext();
-            if (db.Users.Where(u => u.UserName == "LnietoViajero").Count() == 0)
+            if (db.Users.ToList().Count() == 0)
             {
                 db.Users.Add(new User { Email = "luis_m_nieto@hotmail.com", Name = "Luis Miguel Nieto", Password = Encriptador.Cifrar("123456"), Rol = false, UserName = "LnietoViajero" });
                 db.Viajeros.Add(new Viajeros { Address = "caracas", CI = 23682466, Phone = "04126091371", User = db.Users.SingleOrDefault(u => u.UserName == "LnietoViajero") });

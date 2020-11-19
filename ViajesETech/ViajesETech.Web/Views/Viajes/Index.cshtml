@@ -1,10 +1,76 @@
-﻿
+﻿@model IEnumerable<ViajesETech.Dominio.Data.Viajes>
+@using ViajesETech.Web.Models
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var Usuario = Session["Usuario"] as UserLoger;
 }
 
 <h2>Index</h2>
+@if (Usuario.Rol)
+{
+    <p>
+        @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-success" })
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PlaceDisponibles)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DestinoOrig)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DestinoFi)
+        </th>
+        <th>Opciones</th>
+    </tr>
 
-@Html.Partial("_TablaViajes")
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Place)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaceDisponibles)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinosOrigen.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinosFin.Name)
+            </td>
+            <td>
+                @if (Usuario.Rol)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning glyphicon glyphicon-eye-open" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
+                }
+                else
+                {
+                    @Html.ActionLink("Seleccionar", "Selected", new { id = item.Id }, new { @class = "btn btn-primary glyphicon glyphicon-road" })
+                }
 
+            </td>
+        </tr>
+    }
+
+</table>

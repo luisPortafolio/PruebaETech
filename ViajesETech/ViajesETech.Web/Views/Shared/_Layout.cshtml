@@ -1,16 +1,18 @@
 ﻿@using ViajesETech.Web.Models
 @{ 
-   var user = Session["Usuario"] as UserLoger; 
+    var user = Session["Usuario"] as UserLoger;   
 }
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    <title>@ViewBag.Title - Mi Agencia de Viajes</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.numeric.min.js"></script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,31 +22,42 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Nombre de aplicación", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </button>               
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                    @if (user.Rol)
+                    {
+                        <li>@Html.ActionLink("Destinos", "Index", "Destinos")</li>
+                        <li>@Html.ActionLink("Viajeros", "Index", "Viajeros")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Perfil", "Edit",new { id=user.Id }, "Viajeros")</li>
+                    }
+                    <li>@Html.ActionLink("Viajes", "Index", "Viajes")</li>
+
+                    <li>@Html.ActionLink("Salir", "LogOut", "Login")</li>
                 </ul>
             </div>
+           @if (user != null)
+            {
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><p style="color:white;padding:5px" >@user.UserName</p></li>
+                    <li><p style="color:white;padding:5px">@user.UserName</p></li>
                     <li><p style="color:white;padding:5px">@user.Name</p></li>
                     <li><p style="color:white;padding:5px">@user.Email</p></li>
                 </ul>
-               
+            
             </div>
+           }
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="padding:30px">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - Agencia de Viajes</p>
         </footer>
     </div>
 

@@ -10,6 +10,8 @@ namespace ViajesETech.Web.Controllers
     using Dominio.Helpers;
     using Models;
     using ViajesETech.Dominio.Data;
+    using ViajesETech.Dominio.Model;
+    using ViajesETech.Web.Filter;
 
     public class LoginController : Controller
     {
@@ -50,7 +52,7 @@ namespace ViajesETech.Web.Controllers
             }
             try
             {
-                Session["Usuario"] = db.Users.
+                var user = db.Users.
                                         Where(u => u.UserName == login.User && u.Password == passwordCifrado).
                                         ToList().Select(u =>
                                         new UserLoger
@@ -61,7 +63,19 @@ namespace ViajesETech.Web.Controllers
                                             Rol = u.Rol,
                                             UserName = u.UserName
                                         }).First();
-                error = "1";
+                Session["Usuario"]= user;
+                //si es administrador ingresa sin validar los datos de viajero.
+                if (user.Rol)
+                    error = "1";
+                else
+                {
+                    //Validamos que tenga registro de Viajero, sino lo mandamos a llenarlo.
+                    if (db.Viajeros.Where(v => v.User.Id == user.Id).Count() > 0)
+                        error = "1";
+                    else
+                        error = "2";
+                }
+                
             }
             catch (Exception ex)
             {
@@ -69,13 +83,23 @@ namespace ViajesETech.Web.Controllers
             }
             return error;
         }
+            /// <summary>
+            /// Vista del Registro
+            /// </summary>
+            /// <returns>Retorna de la vista del registro de los viajeros o usuarios de la agencia de Viajes</returns>
+        [HttpGet]
+        public ActionResult Registrar()
+        {
+            return View();
+        }
+
         /// <summary>
         ///         Pemite el registro de un nuevo usuario.
         /// </summary>
         /// <param name="userRegister"></param>
         /// <returns>retorna 1 si se puedo crear, de lo contrario el error respectivo.</returns>
         [HttpPost]
-        public string Register(UserRegister userRegister)
+        public string Registrar(UserRegister userRegister)
         {
             string rpta = string.Empty;
             if (!ModelState.IsValid)
@@ -106,6 +130,7 @@ namespace ViajesETech.Web.Controllers
                     Rol = false,
                     UserName = userRegister.UserName
                 });
+               
                 rpta = (db.SaveChanges() > 0) ? "1" : "Intetne de nuevo.";
             }
             catch (Exception ex)
@@ -113,6 +138,51 @@ namespace ViajesETech.Web.Controllers
                 rpta = "Ocurrio un error intente nuevamente.";
             }
             return rpta;
+        }
+        [AccessFilter]
+        [HttpGet]
+        public ActionResult ViajeroCrear()
+        {
+            return View();
+        }
+        [AccessFilter]
+        [HttpPost]
+        public string ViajeroCrear(ViajeroRegister register)
+        {
+            string rpta = string.Empty;
+            if (!ModelState.IsValid)
+            {
+                var query = (from state in ModelState.Values
+                             from error in state.Errors
+                             select error.ErrorMessage).ToList();
+                rpta = "<ul class = 'list-group'>";
+                query.ForEach(x => rpta += "<li class='list-group-item'><p class='text-danger'>" + x.ToString() + "</p></li>");
+                rpta += "</ul>";
+                return rpta;
+            }
+            try
+            {
+                db.Viajeros.Add(new Viajeros
+                {
+                    CI = register.CI,
+                    Address = register.Address,
+                    Phone = register.Phone,
+                    User = db.Users.Find(register.IdUsuario)
+                });
+                db.SaveChanges();
+                rpta = "1";
+            }
+            catch {
+                return "Ocurrio un error";
+            }
+            return rpta ;
+        }
+
+
+        public ActionResult LogOut()
+        {
+            Session["Usuario"] = null;
+            return View("Index");
         }
 
         #endregion
