@@ -56,23 +56,31 @@ namespace ViajesETech.API.Controllers
             {
                return new Result { Message = "El usuario ya Existe", Status = (int)HttpStatusCode.BadRequest };
             }
-            db.Users.Add(new User
+            try
             {
-                 Email = value.Email,
-                Name = value.Name,
-                Password = Encriptador.Cifrar(value.Password) ,
-                Rol = false, UserName = value.UserName  
-            });
-            db.SaveChanges();
-            db.Viajeros.Add(new Viajeros
+                db.Users.Add(new User
+                {
+                    Email = value.Email,
+                    Name = value.Name,
+                    Password = Encriptador.Cifrar(value.Password),
+                    Rol = false,
+                    UserName = value.UserName
+                });
+                db.SaveChanges();
+                db.Viajeros.Add(new Viajeros
+                {
+                    Address = value.Address,
+                    Phone = value.Phone,
+                    CI = value.CI,
+                    User = db.Users.Where(u => u.UserName == value.UserName).First()
+                });
+                db.SaveChanges();
+                return new Result { Message = "Creado", Status = (int)HttpStatusCode.OK };
+            }
+            catch (Exception ex)
             {
-                Address = value.Address,
-                Phone = value.Phone,
-                CI = value.CI,
-                User = db.Users.Where(u => u.UserName == value.UserName).First()
-            });
-            db.SaveChanges();
-            return new Result { Message = "Creado", Status = (int)HttpStatusCode.OK };
+                return new Result { Message = "Ocurrio un error", Status = (int)HttpStatusCode.InternalServerError };
+            }
         }
 
         // PUT: api/Viajero/5
@@ -82,15 +90,22 @@ namespace ViajesETech.API.Controllers
             {
                 if (db.Viajeros.Where(v => v.User.Name == value.Name && v.Id != value.Id).Count() > 0)
                     return new Result { Message = "El Viajero ya Existe.", Status = (int)HttpStatusCode.Ambiguous };
-                var viajeroEditar=db.Viajeros.Find(value.Id);
-                viajeroEditar.Phone = value.Phone;
-                viajeroEditar.CI = value.CI;
-                viajeroEditar.Address = value.Address;
-                viajeroEditar.User.Name = value.Name;
-                viajeroEditar.User.UserName = value.UserName;
-                viajeroEditar.User.Email = value.Email;
-                db.SaveChanges();
-                return new Result { Message = "Viajero Editado", Status = (int)HttpStatusCode.OK };
+                try
+                {
+                    var viajeroEditar = db.Viajeros.Find(value.Id);
+                    viajeroEditar.Phone = value.Phone;
+                    viajeroEditar.CI = value.CI;
+                    viajeroEditar.Address = value.Address;
+                    viajeroEditar.User.Name = value.Name;
+                    viajeroEditar.User.UserName = value.UserName;
+                    viajeroEditar.User.Email = value.Email;
+                    db.SaveChanges();
+                    return new Result { Message = "Viajero Editado", Status = (int)HttpStatusCode.OK };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Message = "Ocurrio un error", Status = (int)HttpStatusCode.InternalServerError };
+                }
             }
             string rpta = string.Empty;
             var query = (from state in ModelState.Values
