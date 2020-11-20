@@ -38,6 +38,8 @@ namespace ViajesETech.API.Controllers
 
         public Result Get([FromUri(Name = "id")]int id, [FromUri(Name = "idViajero")]int idViajero)
         {
+            if (id <= 0 || idViajero <= 0)
+                return new Result { Message = "No puede ser nulo.", Status = (int)HttpStatusCode.BadRequest };
             if (db.ViajesViajeros.Find(id) == null)
                 return new Result { Message = "No Existe", Status = (int)HttpStatusCode.NotFound };
             return new Result
@@ -59,6 +61,8 @@ namespace ViajesETech.API.Controllers
         // POST: api/ReservaViaje
         public Result Post([FromBody]ReservaViaje value)
         {
+            if (value == null)
+                return new Result { Message = "No puede ser nulo.", Status = (int)HttpStatusCode.BadRequest };
             var viaje = db.Viajes.Find(value.IdViajes);
             if (viaje.PlaceDisponibles < 0 && viaje.PlaceDisponibles < value.Place && value.Place <= 0)
                 return new Result { Message = "No se puede reservar, No hay place disponibles.", Status = (int)HttpStatusCode.NotFound };
@@ -93,6 +97,8 @@ namespace ViajesETech.API.Controllers
         // PUT: api/ReservaViaje/5
         public Result Put( [FromBody]ReservaViaje value)
         {
+            if(value==null)
+                return new Result { Message = "No puede ser nulo.", Status = (int)HttpStatusCode.BadRequest };
             var viaje = db.Viajes.Find(value.IdViajes);
             if (viaje.PlaceDisponibles < 0 && viaje.PlaceDisponibles < value.Place && value.Place <= 0)
                 return new Result { Message = "No se puede reservar, No hay place disponibles.", Status = (int)HttpStatusCode.NotFound };
@@ -102,40 +108,40 @@ namespace ViajesETech.API.Controllers
                 try
                 {
                     var v = db.ViajesViajeros.Find(value.Id);
-                    if (v.Viajes.Id != value.IdViajes)
+                    if (v.Viajes.Id != value.IdViajes)                              //Validamos si el cambio fue el viaje.
                     {
-                        var viajeAnterior = db.Viajes.Find(v.Viajes.Id);
-                        viajeAnterior.PlaceDisponibles += v.Place; 
-                        viaje.PlaceDisponibles -= value.Place;                            
+                        var viajeAnterior = db.Viajes.Find(v.Viajes.Id);           //buscamos el viaje anterior 
+                        viajeAnterior.PlaceDisponibles += v.Place;                 //colocamos las plazas nuevamente disponibles
+                        viaje.PlaceDisponibles -= value.Place;                     //restamos las plazas que requerimos
                         db.Entry(viajeAnterior).State = System.Data.Entity.EntityState.Modified;
                         db.Entry(viaje).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        v.Viajes = db.Viajes.Find(value.IdViajes);
-                        v.Place = value.Place;
-                        v.Price = viaje.Price;
-                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);
+                        v.Viajes = db.Viajes.Find(value.IdViajes);             //actualizamos el viaje
+                        v.Place = value.Place;                                 //actualizamos las plazas
+                        v.Price = viaje.Price;                                 //actualizamos el precio
+                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);       //actualizamos el Viajero
                         db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }
-                    else if (v.Place > value.Place)
+                    else if (v.Place > value.Place)                                         //validamos si las plazas son menores 
                     {
-                        viaje.PlaceDisponibles += (v.Place - value.Place);
+                        viaje.PlaceDisponibles += (v.Place - value.Place);                  //actualizamos las plazas disponibles sumando las que ya no se requieren
                         db.Entry(viaje).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        v.Place = value.Place;
-                        v.Price = viaje.Price;
-                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);
+                        v.Place = value.Place;                                              //actualizamos las plazas
+                        v.Price = viaje.Price;                                              //actualizamos el precio
+                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);                    //actualizamos el Viajero
                         db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }
-                    else if (v.Place < value.Place)
+                    else if (v.Place < value.Place)                                        //validamos si las plazas son mayores a las anteriores
                     {
-                        viaje.PlaceDisponibles -= (value.Place - v.Place);
+                        viaje.PlaceDisponibles -= (value.Place - v.Place);                  //actualizamos los disponibles restando los que adquirimos
                         db.Entry(viaje).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        v.Place = value.Place;
-                        v.Price = viaje.Price;
-                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);                        
+                        v.Place = value.Place;                                              //actualizamos las plazas
+                        v.Price = viaje.Price;                                              //actualizamos el precio
+                        v.Viajeros = db.Viajeros.Find(value.IdViajeros);                    //actualizamos el Viajero   
                         db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }

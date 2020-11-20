@@ -192,17 +192,17 @@ namespace ViajesETech.Web.Controllers
         /// <returns></returns>
         public ActionResult Reserva(Reserva reserva)
         {
-            var user = Session["Usuario"] as UserLoger;
-            db.ViajesViajeros.Add(new ViajesViajeros
-            {
-                Place = reserva.PlaceRequired,
-                Price = reserva.Price,
-                Viajes = db.Viajes.Find(reserva.IdViaje),
-                Viajeros = db.Viajeros.Where(v => v.User.Id == user.Id).First()
-            });
-            db.Viajes.Find(reserva.IdViaje).PlaceDisponibles = db.Viajes.Find(reserva.IdViaje).PlaceDisponibles - reserva.PlaceRequired;
-            db.SaveChanges();
-            return RedirectToAction("ViajesViajero");
+                var user = Session["Usuario"] as UserLoger;
+                db.ViajesViajeros.Add(new ViajesViajeros
+                {
+                    Place = reserva.PlaceRequired,
+                    Price = reserva.Price,
+                    Viajes = db.Viajes.Find(reserva.IdViaje),
+                    Viajeros = db.Viajeros.Where(v => v.User.Id == user.Id).First()
+                });
+                db.Viajes.Find(reserva.IdViaje).PlaceDisponibles = db.Viajes.Find(reserva.IdViaje).PlaceDisponibles - reserva.PlaceRequired;
+                db.SaveChanges();
+                return RedirectToAction("ViajesViajero"); 
         }
         /// <summary>
         /// Lista de los Viajes del usuario

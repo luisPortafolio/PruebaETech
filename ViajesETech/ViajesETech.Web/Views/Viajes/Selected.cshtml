@@ -53,7 +53,7 @@
 
     </dl>
     <div class=" center-block">
-        @using (Html.BeginForm("Reserva", "Viajes", FormMethod.Get))
+        @using (Html.BeginForm("Reserva", "Viajes", FormMethod.Get,new { @id="frm" }))
         {
             @Html.Hidden("Price", Model.Price.ToString("N0"))
             @Html.Hidden("IdViaje", Model.Id)
@@ -67,7 +67,7 @@
             </div>
             <br />
             <div class="form-group-sm">
-                <input type="submit" class="btn btn-success" value="Reservar" />
+                <input type="submit" class="btn btn-success" value="Reservar" id="btnSubmit" />
                 @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default" })
             </div>
         }
@@ -75,14 +75,36 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $("#Requeridas").change(function (e) {                  
+    $(document).ready(function () {        
+        $("#btnSubmit").prop("disabled", true);
+        $("#Requeridas").change(function (e) {   
+            if (parseFloat($("#Requeridas").val()) > 0) {
+                $("#btnSubmit").prop("disabled", false);
+            }
+            else
+            {
+                $("#btnSubmit").prop("disabled", true);
+            }
             document.getElementById("PriceTotal").innerHTML = "";           
             var place = parseFloat($("#Requeridas").val());
             var total = place * parseFloat(@Model.Price.ToString());
             var res = "<label class='text-danger'>"+total+"</label>"
             document.getElementById("PriceTotal").innerHTML = res;           
         })
+        $("#Requeridas").keyup(function (e) {   
+            if (parseFloat($("#Requeridas").val()) > 0) {
+                $("#btnSubmit").prop("disabled", false);
+            }
+            else {
+                $("#btnSubmit").prop("disabled", true);
+            }
+            document.getElementById("PriceTotal").innerHTML = "";           
+            var place = parseFloat($("#Requeridas").val());         
+            var total = place * parseFloat(@Model.Price.ToString());
+            var res = "<label class='text-danger'>"+total+"</label>"
+            document.getElementById("PriceTotal").innerHTML = res;           
+        })
     })
+    
 
 </script>
