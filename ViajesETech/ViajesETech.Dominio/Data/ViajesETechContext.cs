@@ -78,7 +78,7 @@
         [MaxLength(50,ErrorMessage ="El campo solo puede tener 50 caracteres")]
         [Index("IX_Name", IsUnique = true)]
         public string Name { get; set; }
-        public virtual ICollection<Viajes> Viajes { get; set; }
+       
     }
     [Table("User")]
     public class User
